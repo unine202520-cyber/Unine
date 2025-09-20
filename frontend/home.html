@@ -1,1 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户信息</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .info { margin-top: 20px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>欢迎回来</h1>
+  <div class="info">
+    <p>账户：<span id="account">加载中…</span></p>
+    <p>金币：<span id="coins">加载中…</span></p>
+    <p>余额：<span id="balance">加载中…</span></p>
+  </div>
 
+  <!-- 按顺序引入 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../supabaseClient.js"></script>
+  <script src="home.js"></script>
+</body>
+</html>
