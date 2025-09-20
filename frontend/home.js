@@ -29,3 +29,8 @@ async function loadUserInfo() {
 
 // 页面加载完执行
 loadUserInfo();
+
+supabase
+  .channel('realtime-user')
+  .on('postgres_changes', { ... })
+  .subscribe();
