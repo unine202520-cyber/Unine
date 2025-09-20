@@ -1,36 +1,63 @@
-// 读取当前登录用户
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+// 替换为你的 Supabase 项目参数
+const SUPABASE_URL = 'https://xxxx.supabase.co'
+const SUPABASE_KEY = 'public-anon-key'
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+
+// 页面加载后执行
+document.addEventListener('DOMContentLoaded', loadUserInfo)
+
 async function loadUserInfo() {
-  const { data: { user }, error: userError } = await window.supabase.auth.getUser();
+  // 1️⃣ 获取当前登录用户
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
   if (userError || !user) {
-    // 未登录则跳转到登录页
-    alert('请先登录');
-    window.location.href = '/index.html';
-    return;
+    alert('请先登录')
+    location.href = '/index.html'
+    return
   }
 
-  // 根据 auth.users 的 id 去查询 public.users 表
-  const { data, error } = await window.supabase
+  // 2️⃣ 查询扩展表 users
+  const { data, error } = await supabase
     .from('users')
     .select('coins, balance, account')
     .eq('id', user.id)
-    .single();
+    .single()
 
   if (error) {
-    console.error('加载用户信息失败:', error);
-    alert('加载用户信息失败');
-    return;
+    console.error('加载用户信息失败:', error)
+    alert('加载用户信息失败')
+    return
   }
 
-  // 显示到页面
-  document.getElementById('account').textContent = data.account ?? '—';
-  document.getElementById('coins').textContent   = data.coins ?? 0;
-  document.getElementById('balance').textContent = data.balance ?? 0;
+  // 3️⃣ 初次渲染
+  renderUser(data)
+
+  // 4️⃣ 订阅 Realtime 更新
+  supabase
+    .channel('realtime-user')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',              // 监听 INSERT / UPDATE / DELETE
+        schema: 'public',
+        table: 'users',
+        filter: `id=eq.${user.id}` // 只监听当前登录用户
+      },
+      payload => {
+        // 这里的 payload.new 就是最新数据
+        if (payload.new) {
+          renderUser(payload.new)
+        }
+      }
+    )
+    .subscribe()
 }
 
-// 页面加载完执行
-loadUserInfo();
-
-supabase
-  .channel('realtime-user')
-  .on('postgres_changes', { ... })
-  .subscribe();
+// 渲染到页面
+function renderUser(row) {
+  document.getElementById('account').textContent = row.account ?? '—'
+  document.getElementById('coins').textContent   = row.coins   ?? 0
+  document.getElementById('balance').textContent = row.balance ?? 0
+}
