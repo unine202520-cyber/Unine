@@ -41,7 +41,7 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
   localStorage.setItem('currentUser', data.user.email);
 
   // 跳转主页
-  window.location.href = 'frontend/hoem.html';
+  window.location.href = 'frontend/home.html';
 });
 
 // --- 注册 ---
