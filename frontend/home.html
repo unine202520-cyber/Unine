@@ -17,7 +17,7 @@
     <p>余额：<span id="balance">加载中…</span></p>
   </div>
 
-  <!-- 按顺序引入 -->
+  <!-- 必须先加载 supabase-js，再加载客户端，再加载逻辑 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../supabaseClient.js"></script>
   <script src="home.js"></script>
