@@ -1,145 +1,97 @@
-/* 页面整体布局 */
+/* 基础布局 */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: #f6f8fa;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+  align-items: flex-start;
+  padding-top: 60px;
+  min-height: 100vh;
+  color: #333;
 }
 
-/* 容器卡片 */
 .container {
   background: #fff;
-  padding: 40px 30px;
+  width: 320px;
+  padding: 30px 25px;
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  width: 360px;
-  text-align: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
-/* 标题和描述 */
-.title {
-  font-size: 28px;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.desc {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 25px;
-}
-
-/* Tab 按钮 */
-.tab-container {
+/* Tab */
+.tabs {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 25px;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.tab-btn {
+.tabs button {
   flex: 1;
   padding: 10px 0;
-  background: #e4e6eb;
   border: none;
-  font-size: 16px;
+  background: transparent;
   cursor: pointer;
-  border-radius: 8px 8px 0 0;
-  transition: background 0.3s;
+  font-size: 16px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
 }
 
-.tab-btn.active {
-  background: #007bff;
-  color: #fff;
+.tabs button.active {
+  color: #0077ff;
+  border-bottom: 2px solid #0077ff;
+  font-weight: 600;
 }
 
-.tab-btn:not(.active):hover {
-  background: #d4d6db;
-}
-
-/* 表单容器 */
-.form-container {
-  display: flex;
-  flex-direction: column;
-}
-
-/* 字段 */
-.field {
+/* 表单 */
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  padding: 10px;
   margin-bottom: 15px;
-  position: relative;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 6px;
   border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
   font-size: 14px;
-  box-sizing: border-box;
-  transition: border-color 0.3s;
+  transition: border-color 0.2s;
 }
 
 input:focus {
-  border-color: #007bff;
+  border-color: #0077ff;
   outline: none;
 }
 
-/* 密码切换按钮 */
-.password-wrapper {
-  position: relative;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-/* 消息提示 */
-.form-msg {
-  font-size: 13px;
-  color: red;
-  margin-bottom: 10px;
-  min-height: 18px;
-}
-
-/* 主要按钮 */
-.primary-btn {
-  padding: 12px;
-  background-color: #007bff;
+button {
+  background: #0077ff;
   color: #fff;
+  padding: 10px;
   border: none;
   border-radius: 6px;
-  font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s;
+  font-size: 16px;
+  transition: background 0.2s;
 }
 
-.primary-btn:hover {
-  background-color: #0056b3;
+button:hover {
+  background: #005ed1;
 }
 
-/* 条款复选框 */
-.agreement {
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  margin-bottom: 15px;
-  justify-content: flex-start;
+.msg {
+  margin-top: 10px;
+  font-size: 14px;
+  color: red;
 }
 
-.agreement input {
-  margin-right: 8px;
-}
-
-/* 隐藏元素 */
 .hidden {
   display: none;
+}
+
+label.terms {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+label.terms input[type="checkbox"] {
+  margin-right: 6px;
 }
