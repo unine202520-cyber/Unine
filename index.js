@@ -1,4 +1,4 @@
-// Tab 切换
+// --- Tab 切换 ---
 const showLogin = document.getElementById('showLogin');
 const showRegister = document.getElementById('showRegister');
 const loginForm = document.getElementById('loginForm');
@@ -18,7 +18,7 @@ showRegister.addEventListener('click', () => {
   showLogin.classList.remove('active');
 });
 
-// 登录
+// --- 登录 ---
 document.getElementById('loginBtn').addEventListener('click', async () => {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value.trim();
@@ -36,13 +36,15 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
     return;
   }
 
-  // 登录成功后可跳转
+  // 保存用户信息
   localStorage.setItem('currentUserUUID', data.user.id);
   localStorage.setItem('currentUser', data.user.email);
+
+  // 跳转主页
   window.location.href = 'home.html';
 });
 
-// 注册
+// --- 注册 ---
 document.getElementById('registerBtn').addEventListener('click', async () => {
   const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value.trim();
@@ -51,16 +53,15 @@ document.getElementById('registerBtn').addEventListener('click', async () => {
   const msg = document.getElementById('registerMsg');
   msg.innerText = '';
 
-  if (!agree) return msg.innerText = '请同意条款';
+  if (!agree) return msg.innerText = '请先同意条款';
   if (!email || !password) return msg.innerText = '请输入邮箱和密码';
   if (password !== confirm) return msg.innerText = '两次输入的密码不一致';
 
-  // 1. 创建 Supabase Auth 用户
+  // 1. 注册 Supabase Auth 用户
   const { data, error } = await window.supabase.auth.signUp({ email, password });
   if (error) return msg.innerText = error.message;
 
-  // 2. 插入扩展 users 表
-  //    注意：data.user 可能是 null（例如需要邮件确认时），这里用 data.user?.id 保护
+  // 2. 插入扩展 users 表（coins/balance 初始为0）
   const userId = data.user?.id;
   if (userId) {
     const { error: userError } = await window.supabase
@@ -70,5 +71,5 @@ document.getElementById('registerBtn').addEventListener('click', async () => {
   }
 
   msg.style.color = 'green';
-  msg.innerText = '注册成功！请前往邮箱验证后登录。';
+  msg.innerText = '注册成功！请前往邮箱验证后再登录。';
 });
