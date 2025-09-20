@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>注册 / 登录</title>
-
-  <!-- 引入样式 -->
+  <!-- 独立样式文件 -->
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
@@ -20,6 +19,7 @@
       <input type="email" id="loginEmail" placeholder="邮箱" required />
       <input type="password" id="loginPassword" placeholder="密码" required />
       <button id="loginBtn">登录</button>
+      <button id="forgotBtn" type="button" class="link-btn">忘记密码？</button>
       <div id="loginMsg" class="msg"></div>
     </div>
 
@@ -33,6 +33,13 @@
       </label>
       <button id="registerBtn">注册</button>
       <div id="registerMsg" class="msg"></div>
+    </div>
+
+    <!-- 忘记密码弹窗 -->
+    <div id="forgotBox" class="hidden">
+      <input type="email" id="forgotEmail" placeholder="请输入注册邮箱" />
+      <button id="sendReset" type="button">发送重置邮件</button>
+      <div id="forgotMsg" class="msg"></div>
     </div>
   </div>
 
