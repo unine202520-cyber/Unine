@@ -73,3 +73,37 @@ document.getElementById('registerBtn').addEventListener('click', async () => {
   msg.style.color = 'green';
   msg.innerText = '注册成功！请前往邮箱验证后再登录。';
 });
+
+// --- 忘记密码 ---
+const forgotBtn  = document.getElementById('forgotBtn');
+const forgotBox  = document.getElementById('forgotBox');
+const sendReset  = document.getElementById('sendReset');
+const forgotMsg  = document.getElementById('forgotMsg');
+
+forgotBtn.addEventListener('click', () => {
+  // 显示/隐藏输入框
+  forgotBox.classList.toggle('hidden');
+  forgotMsg.innerText = '';
+});
+
+sendReset.addEventListener('click', async () => {
+  const email = document.getElementById('forgotEmail').value.trim();
+  forgotMsg.innerText = '';
+
+  if (!email) {
+    forgotMsg.innerText = '请输入注册邮箱';
+    return;
+  }
+
+  // 发送重置密码邮件
+  const { error } = await window.supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://u92025.netlify.app/reset.html' // 你的重置完成后跳转页
+  });
+
+  if (error) {
+    forgotMsg.innerText = error.message;
+  } else {
+    forgotMsg.style.color = 'green';
+    forgotMsg.innerText = '重置邮件已发送，请查收邮箱';
+  }
+});
