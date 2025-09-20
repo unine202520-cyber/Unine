@@ -1,4 +1,3 @@
-//  数据库  // //  数据库  // //  数据库  //
 window.supabaseClient = window.supabase.createClient(
   "https://skcghmxmmevoasvolakx.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrY2dobXhtbWV2b2Fzdm9sYWt4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzOTQ5NzUsImV4cCI6MjA3Mzk3MDk3NX0.A8Xaj13AsNufni69CtcaVts66TE5Rce_VbwObj4iSv4"
