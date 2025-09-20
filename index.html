@@ -6,16 +6,100 @@
   <title>Sign Up / Login</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
   <style>
-    body { font-family: Arial; margin: 50px; }
-    input { display: block; margin: 10px 0; padding: 8px; width: 250px; }
-    button { padding: 8px 15px; }
+    /* 页面背景和居中布局 */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f6fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* 卡片容器 */
+    .card {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      width: 350px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    h1 {
+      margin-bottom: 25px;
+      font-size: 26px;
+      color: #333;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 20px;
+      color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: border 0.3s;
+    }
+
+    input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    p {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
     .hidden { display: none; }
   </style>
 </head>
 <body>
-  <h1>Sign Up / Login</h1>
 
-  <div id="registerDiv">
+  <!-- Sign Up Card -->
+  <div class="card" id="registerDiv">
+    <h1>Sign Up / Login</h1>
     <h2>Sign Up</h2>
     <input type="email" id="registerEmail" placeholder="Email" />
     <input type="password" id="registerPassword" placeholder="Password" />
@@ -23,7 +107,9 @@
     <p>Already have an account? <a href="#" onclick="toggleForms()">Login</a></p>
   </div>
 
-  <div id="loginDiv" class="hidden">
+  <!-- Login Card -->
+  <div class="card hidden" id="loginDiv">
+    <h1>Sign Up / Login</h1>
     <h2>Login</h2>
     <input type="email" id="loginEmail" placeholder="Email" />
     <input type="password" id="loginPassword" placeholder="Password" />
@@ -35,7 +121,7 @@
     const supabaseUrl = "https://skcghmxmmevoasvolakx.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrY2dobXhtbWV2b2Fzdm9sYWt4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzOTQ5NzUsImV4cCI6MjA3Mzk3MDk3NX0.A8Xaj13AsNufni69CtcaVts66TE5Rce_VbwObj4iSv4";
     const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
-    
+
     function toggleForms() {
       document.getElementById('registerDiv').classList.toggle('hidden');
       document.getElementById('loginDiv').classList.toggle('hidden');
@@ -55,7 +141,7 @@
       if (userError) return alert('Failed to create user record: ' + userError.message);
 
       alert('Sign up successful! Please verify your email and then log in.');
-      toggleForms(); // switch to login form
+      toggleForms();
     }
 
     // Login
@@ -71,7 +157,7 @@
       localStorage.setItem('currentUserUUID', user.id);
       localStorage.setItem('currentUser', user.email);
 
-      // Redirect to home.html after login
+      // Redirect to home.html
       window.location.href = 'home.html';
     }
 
@@ -82,7 +168,6 @@
         window.currentUserUUID = data.user.id;
         localStorage.setItem('currentUserUUID', data.user.id);
         localStorage.setItem('currentUser', data.user.email);
-        // Already logged in → redirect to home.html
         window.location.href = 'home.html';
       }
     };
