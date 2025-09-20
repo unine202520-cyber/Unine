@@ -18,27 +18,25 @@ showRegister.addEventListener('click', () => {
   showLogin.classList.remove('active');
 });
 
-// 密码显示切换
-document.querySelectorAll('.toggle-password').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const target = document.getElementById(btn.dataset.target);
-    if (target.type === 'password') {
-      target.type = 'text';
-    } else {
-      target.type = 'password';
-    }
-  });
-});
-
 // 登录
 document.getElementById('loginBtn').addEventListener('click', async () => {
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-  const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
-  if (error) {
-    document.getElementById('loginMsg').innerText = error.message;
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+  const msg = document.getElementById('loginMsg');
+  msg.innerText = '';
+
+  if (!email || !password) {
+    msg.innerText = '请输入邮箱和密码';
     return;
   }
+
+  const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    msg.innerText = error.message;
+    return;
+  }
+
+  // 登录成功后可跳转
   localStorage.setItem('currentUserUUID', data.user.id);
   localStorage.setItem('currentUser', data.user.email);
   window.location.href = 'home.html';
@@ -46,23 +44,31 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
 
 // 注册
 document.getElementById('registerBtn').addEventListener('click', async () => {
-  const email = document.getElementById('regEmail').value;
-  const password = document.getElementById('regPassword').value;
-  const confirm = document.getElementById('regConfirmPassword').value;
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value.trim();
+  const confirm = document.getElementById('regConfirmPassword').value.trim();
   const agree = document.getElementById('agreeTerms').checked;
   const msg = document.getElementById('registerMsg');
-
   msg.innerText = '';
 
-  if (!agree) return msg.innerText = 'You must agree to the terms';
-  if (password !== confirm) return msg.innerText = 'Passwords do not match';
+  if (!agree) return msg.innerText = '请同意条款';
+  if (!email || !password) return msg.innerText = '请输入邮箱和密码';
+  if (password !== confirm) return msg.innerText = '两次输入的密码不一致';
 
+  // 1. 创建 Supabase Auth 用户
   const { data, error } = await window.supabase.auth.signUp({ email, password });
   if (error) return msg.innerText = error.message;
 
-  // 插入 users 表
-  const { error: userError } = await window.supabase.from('users').insert([{ id: data.user.id, coins: 0, balance: 0 }]);
-  if (userError) return msg.innerText = userError.message;
+  // 2. 插入扩展 users 表
+  //    注意：data.user 可能是 null（例如需要邮件确认时），这里用 data.user?.id 保护
+  const userId = data.user?.id;
+  if (userId) {
+    const { error: userError } = await window.supabase
+      .from('users')
+      .insert([{ id: userId, coins: 0, balance: 0 }]);
+    if (userError) return msg.innerText = '注册成功但写入扩展表失败：' + userError.message;
+  }
 
-  msg.innerText = 'Registration successful! Please verify your email and login.';
+  msg.style.color = 'green';
+  msg.innerText = '注册成功！请前往邮箱验证后登录。';
 });
