@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>注册 / 登录</title>
+  <title>Sign Up / Login</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
   <style>
     body { font-family: Arial; margin: 50px; }
@@ -13,22 +13,22 @@
   </style>
 </head>
 <body>
-  <h1>注册 / 登录</h1>
+  <h1>Sign Up / Login</h1>
 
   <div id="registerDiv">
-    <h2>注册</h2>
-    <input type="email" id="registerEmail" placeholder="邮箱" />
-    <input type="password" id="registerPassword" placeholder="密码" />
-    <button onclick="register()">注册</button>
-    <p>已有账号？ <a href="#" onclick="toggleForms()">登录</a></p>
+    <h2>Sign Up</h2>
+    <input type="email" id="registerEmail" placeholder="Email" />
+    <input type="password" id="registerPassword" placeholder="Password" />
+    <button onclick="register()">Sign Up</button>
+    <p>Already have an account? <a href="#" onclick="toggleForms()">Login</a></p>
   </div>
 
   <div id="loginDiv" class="hidden">
-    <h2>登录</h2>
-    <input type="email" id="loginEmail" placeholder="邮箱" />
-    <input type="password" id="loginPassword" placeholder="密码" />
-    <button onclick="login()">登录</button>
-    <p>没有账号？ <a href="#" onclick="toggleForms()">注册</a></p>
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email" />
+    <input type="password" id="loginPassword" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <p>No account? <a href="#" onclick="toggleForms()">Sign Up</a></p>
   </div>
 
   <script>
@@ -41,48 +41,48 @@
       document.getElementById('loginDiv').classList.toggle('hidden');
     }
 
-    // 注册
+    // Sign Up
     async function register() {
       const email = document.getElementById('registerEmail').value;
       const password = document.getElementById('registerPassword').value;
 
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password });
-      if (signUpError) return alert('注册失败: ' + signUpError.message);
+      if (signUpError) return alert('Sign up failed: ' + signUpError.message);
 
-      // 在 users 扩展表插入一条记录
+      // Insert record into users table
       const userId = signUpData.user.id;
       const { error: userError } = await supabase.from('users').insert([{ id: userId, coins: 0, balance: 0 }]);
-      if (userError) return alert('创建用户扩展表失败: ' + userError.message);
+      if (userError) return alert('Failed to create user record: ' + userError.message);
 
-      alert('注册成功，请登录邮箱验证后登录！');
-      toggleForms(); // 跳到登录表单
+      alert('Sign up successful! Please verify your email and then log in.');
+      toggleForms(); // switch to login form
     }
 
-    // 登录
+    // Login
     async function login() {
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
 
       const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({ email, password });
-      if (loginError) return alert('登录失败: ' + loginError.message);
+      if (loginError) return alert('Login failed: ' + loginError.message);
 
       const user = loginData.user;
       window.currentUserUUID = user.id;
       localStorage.setItem('currentUserUUID', user.id);
       localStorage.setItem('currentUser', user.email);
 
-      // 登录成功后跳转到 home.html
+      // Redirect to home.html after login
       window.location.href = 'home.html';
     }
 
-    // 页面加载时检查是否已登录
+    // Check if already logged in on page load
     window.onload = async () => {
       const { data } = await supabase.auth.getUser();
       if (data.user) {
         window.currentUserUUID = data.user.id;
         localStorage.setItem('currentUserUUID', data.user.id);
         localStorage.setItem('currentUser', data.user.email);
-        // 已登录直接跳转 home.html
+        // Already logged in → redirect to home.html
         window.location.href = 'home.html';
       }
     };
