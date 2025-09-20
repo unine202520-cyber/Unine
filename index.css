@@ -1,0 +1,145 @@
+/* 页面整体布局 */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* 容器卡片 */
+.container {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  width: 360px;
+  text-align: center;
+}
+
+/* 标题和描述 */
+.title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.desc {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+/* Tab 按钮 */
+.tab-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 25px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 0;
+  background: #e4e6eb;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  transition: background 0.3s;
+}
+
+.tab-btn.active {
+  background: #007bff;
+  color: #fff;
+}
+
+.tab-btn:not(.active):hover {
+  background: #d4d6db;
+}
+
+/* 表单容器 */
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 字段 */
+.field {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* 密码切换按钮 */
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* 消息提示 */
+.form-msg {
+  font-size: 13px;
+  color: red;
+  margin-bottom: 10px;
+  min-height: 18px;
+}
+
+/* 主要按钮 */
+.primary-btn {
+  padding: 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.primary-btn:hover {
+  background-color: #0056b3;
+}
+
+/* 条款复选框 */
+.agreement {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 15px;
+  justify-content: flex-start;
+}
+
+.agreement input {
+  margin-right: 8px;
+}
+
+/* 隐藏元素 */
+.hidden {
+  display: none;
+}
