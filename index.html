@@ -1,176 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up / Login</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
-  <style>
-    /* 页面背景和居中布局 */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f6fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+  <meta charset="UTF-8" />
+  <title>U9</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="index.css" />
 
-    /* 卡片容器 */
-    .card {
-      background: #fff;
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-      width: 350px;
-      text-align: center;
-      transition: transform 0.3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    h1 {
-      margin-bottom: 25px;
-      font-size: 26px;
-      color: #333;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      font-size: 20px;
-      color: #555;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      box-sizing: border-box;
-      transition: border 0.3s;
-    }
-
-    input:focus {
-      border-color: #007bff;
-      outline: none;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 15px;
-      background-color: #007bff;
-      border: none;
-      color: white;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    p {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #555;
-    }
-
-    a {
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .hidden { display: none; }
-  </style>
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- 全局 Supabase 初始化 -->
+  <script src="supabaseClient.js"></script>
 </head>
 <body>
+  <div class="container">
+    <h1 class="title">Welcome</h1>
+    <p class="desc">Please register or login below:</p>
 
-  <!-- Sign Up Card -->
-  <div class="card" id="registerDiv">
-    <h1>Sign Up / Login</h1>
-    <h2>Sign Up</h2>
-    <input type="email" id="registerEmail" placeholder="Email" />
-    <input type="password" id="registerPassword" placeholder="Password" />
-    <button onclick="register()">Sign Up</button>
-    <p>Already have an account? <a href="#" onclick="toggleForms()">Login</a></p>
+    <!-- Tab -->
+    <div class="tab-container">
+      <button id="showLogin" class="tab-btn active">Login</button>
+      <button id="showRegister" class="tab-btn">Register</button>
+    </div>
+
+    <!-- 登录 -->
+    <div id="loginForm" class="form-container">
+      <div class="field">
+        <input type="email" id="loginEmail" placeholder="Email" autocomplete="username" />
+      </div>
+
+      <div class="field password-wrapper">
+        <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" />
+        <button type="button" class="toggle-password" data-target="loginPassword">👁️</button>
+      </div>
+
+      <div id="loginMsg" class="form-msg"></div>
+      <button id="loginBtn" class="primary-btn">Login</button>
+    </div>
+
+    <!-- 注册 -->
+    <div id="registerForm" class="form-container hidden">
+      <div class="field">
+        <input type="email" id="regEmail" placeholder="Email" autocomplete="username" />
+      </div>
+
+      <div class="field password-wrapper">
+        <input type="password" id="regPassword" placeholder="Password" autocomplete="new-password" />
+        <button type="button" class="toggle-password" data-target="regPassword">👁️</button>
+      </div>
+
+      <div class="field password-wrapper">
+        <input type="password" id="regConfirmPassword" placeholder="Confirm Password" autocomplete="new-password" />
+        <button type="button" class="toggle-password" data-target="regConfirmPassword">👁️</button>
+      </div>
+
+      <label class="agreement">
+        <input type="checkbox" id="agreeTerms" />
+        <span>I agree to the terms</span>
+      </label>
+
+      <div id="registerMsg" class="form-msg"></div>
+      <button id="registerBtn" class="primary-btn">Register</button>
+    </div>
   </div>
 
-  <!-- Login Card -->
-  <div class="card hidden" id="loginDiv">
-    <h1>Sign Up / Login</h1>
-    <h2>Login</h2>
-    <input type="email" id="loginEmail" placeholder="Email" />
-    <input type="password" id="loginPassword" placeholder="Password" />
-    <button onclick="login()">Login</button>
-    <p>No account? <a href="#" onclick="toggleForms()">Sign Up</a></p>
-  </div>
-
-  <script>
-    const supabaseUrl = "https://skcghmxmmevoasvolakx.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrY2dobXhtbWV2b2Fzdm9sYWt4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzOTQ5NzUsImV4cCI6MjA3Mzk3MDk3NX0.A8Xaj13AsNufni69CtcaVts66TE5Rce_VbwObj4iSv4";
-    const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
-
-    function toggleForms() {
-      document.getElementById('registerDiv').classList.toggle('hidden');
-      document.getElementById('loginDiv').classList.toggle('hidden');
-    }
-
-    // Sign Up
-    async function register() {
-      const email = document.getElementById('registerEmail').value;
-      const password = document.getElementById('registerPassword').value;
-
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password });
-      if (signUpError) return alert('Sign up failed: ' + signUpError.message);
-
-      // Insert record into users table
-      const userId = signUpData.user.id;
-      const { error: userError } = await supabase.from('users').insert([{ id: userId, coins: 0, balance: 0 }]);
-      if (userError) return alert('Failed to create user record: ' + userError.message);
-
-      alert('Sign up successful! Please verify your email and then log in.');
-      toggleForms();
-    }
-
-    // Login
-    async function login() {
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-
-      const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({ email, password });
-      if (loginError) return alert('Login failed: ' + loginError.message);
-
-      const user = loginData.user;
-      window.currentUserUUID = user.id;
-      localStorage.setItem('currentUserUUID', user.id);
-      localStorage.setItem('currentUser', user.email);
-
-      // Redirect to home.html
-      window.location.href = 'home.html';
-    }
-
-    // Check if already logged in on page load
-    window.onload = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (data.user) {
-        window.currentUserUUID = data.user.id;
-        localStorage.setItem('currentUserUUID', data.user.id);
-        localStorage.setItem('currentUser', data.user.email);
-        window.location.href = 'home.html';
-      }
-    };
-  </script>
+  <script src="index.js"></script>
 </body>
 </html>
