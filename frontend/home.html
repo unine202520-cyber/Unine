@@ -7,17 +7,21 @@
   <style>
     body { font-family: sans-serif; padding: 20px; }
     .info { margin-top: 20px; font-size: 18px; }
+    button { margin-top: 12px; padding: 8px 12px; }
   </style>
 </head>
 <body>
   <h1>欢迎回来</h1>
+
   <div class="info">
     <p>账户：<span id="account">加载中…</span></p>
     <p>金币：<span id="coins">加载中…</span></p>
     <p>余额：<span id="balance">加载中…</span></p>
   </div>
 
-  <!-- 必须先加载 supabase-js，再加载客户端，再加载逻辑 -->
+  <button id="logoutBtn">退出登录</button>
+
+  <!-- 注意加载顺序：supabase-js -> supabaseClient.js (在项目根) -> 本页逻辑 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../supabaseClient.js"></script>
   <script src="home.js"></script>
