@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>重置密码</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <h2>重置密码</h2>
+    <input type="password" id="newPassword" placeholder="请输入新密码" required />
+    <input type="password" id="confirmPassword" placeholder="再次输入新密码" required />
+    <button id="resetBtn">更新密码</button>
+    <div id="resetMsg" class="msg"></div>
+  </div>
+
+  <!-- Supabase 脚本 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script>
+    const btn = document.getElementById('resetBtn');
+    const msg = document.getElementById('resetMsg');
+
+    btn.addEventListener('click', async () => {
+      const pass1 = document.getElementById('newPassword').value.trim();
+      const pass2 = document.getElementById('confirmPassword').value.trim();
+      msg.innerText = '';
+
+      if (!pass1 || !pass2) {
+        msg.innerText = '请输入两次密码';
+        return;
+      }
+      if (pass1 !== pass2) {
+        msg.innerText = '两次密码不一致';
+        return;
+      }
+
+      // Supabase 会从 URL 读取 access_token
+      const { data: { session }, error: getErr } = await window.supabase.auth.getSession();
+      if (getErr || !session) {
+        msg.innerText = '链接无效或已过期，请重新请求重置邮件';
+        return;
+      }
+
+      // 更新密码
+      const { error } = await window.supabase.auth.updateUser({ password: pass1 });
+      if (error) {
+        msg.innerText = error.message;
+      } else {
+        msg.style.color = 'green';
+        msg.innerText = '密码已更新，请使用新密码登录';
+        // 可选：几秒后跳转登录页
+        setTimeout(() => { window.location.href = 'index.html'; }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>
