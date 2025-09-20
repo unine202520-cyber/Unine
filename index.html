@@ -4,42 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>注册 / 登录</title>
-  <style>
-    body { font-family: sans-serif; margin: 20px; }
-    .tabs button.active { font-weight: bold; }
-    .hidden { display: none; }
-    .msg { color: red; margin-top: 10px; }
-    input { display: block; margin-bottom: 10px; width: 200px; }
-  </style>
+
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
+  <div class="container">
+    <div class="tabs">
+      <button id="showLogin" class="active">登录</button>
+      <button id="showRegister">注册</button>
+    </div>
 
-  <div class="tabs">
-    <button id="showLogin" class="active">登录</button>
-    <button id="showRegister">注册</button>
+    <!-- 登录表单 -->
+    <div id="loginForm">
+      <input type="email" id="loginEmail" placeholder="邮箱" required />
+      <input type="password" id="loginPassword" placeholder="密码" required />
+      <button id="loginBtn">登录</button>
+      <div id="loginMsg" class="msg"></div>
+    </div>
+
+    <!-- 注册表单 -->
+    <div id="registerForm" class="hidden">
+      <input type="email" id="regEmail" placeholder="邮箱" required />
+      <input type="password" id="regPassword" placeholder="密码" required />
+      <input type="password" id="regConfirmPassword" placeholder="确认密码" required />
+      <label class="terms">
+        <input type="checkbox" id="agreeTerms" /> 我已阅读并同意条款
+      </label>
+      <button id="registerBtn">注册</button>
+      <div id="registerMsg" class="msg"></div>
+    </div>
   </div>
 
-  <!-- 登录表单 -->
-  <div id="loginForm">
-    <input type="email" id="loginEmail" placeholder="邮箱" required />
-    <input type="password" id="loginPassword" placeholder="密码" required />
-    <button id="loginBtn">登录</button>
-    <div id="loginMsg" class="msg"></div>
-  </div>
-
-  <!-- 注册表单 -->
-  <div id="registerForm" class="hidden">
-    <input type="email" id="regEmail" placeholder="邮箱" required />
-    <input type="password" id="regPassword" placeholder="密码" required />
-    <input type="password" id="regConfirmPassword" placeholder="确认密码" required />
-    <label>
-      <input type="checkbox" id="agreeTerms" /> 我已阅读并同意条款
-    </label>
-    <button id="registerBtn">注册</button>
-    <div id="registerMsg" class="msg"></div>
-  </div>
-
-  <!-- 脚本加载顺序：supabase-js > supabaseClient.js > index.js -->
+  <!-- 加载顺序：supabase-js > supabaseClient.js > index.js -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabaseClient.js"></script>
   <script src="index.js"></script>
