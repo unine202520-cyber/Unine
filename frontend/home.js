@@ -1,3 +1,5 @@
+// frontend/home.js
+
 async function init() {
   // 1️⃣ 获取当前登录用户
   const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
@@ -11,7 +13,7 @@ async function init() {
   // 2️⃣ 初次加载用户信息
   await loadUserInfo(userId);
 
-  // 3️⃣ 订阅 Realtime
+  // 3️⃣ 订阅 Realtime 更新
   window.supabaseClient
     .channel('realtime-user')
     .on(
@@ -22,7 +24,8 @@ async function init() {
         table: 'users',
         filter: `id=eq.${userId}`
       },
-      payload => {
+      (payload) => {
+        // 监听到数据库更新时，直接刷新显示
         if (payload.new) {
           document.getElementById('account').textContent = payload.new.account ?? '—';
           document.getElementById('coins').textContent   = payload.new.coins ?? 0;
@@ -52,5 +55,5 @@ async function loadUserInfo(userId) {
   document.getElementById('balance').textContent = data.balance ?? 0;
 }
 
-// 页面加载完执行
+// 页面加载完成后执行
 init();
